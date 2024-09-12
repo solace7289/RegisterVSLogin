@@ -1,0 +1,4 @@
+#spring.application.name=RegisterLogin
+
+server:
+  port: 8088
