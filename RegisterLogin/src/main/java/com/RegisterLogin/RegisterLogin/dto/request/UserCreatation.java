@@ -1,63 +1,20 @@
-package com.RegisterLogin.RegisterLogin.Entities;
+package com.RegisterLogin.RegisterLogin.dto.request;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "User")
-//@Data
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID) //su dung UUID de khong bi trung lap
-    @Column(name = "user_id")
-    @ToString.Exclude //add toString to ignore error stackOverFlow
-    private String userId;
+public class UserCreatation {
 
-
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "username")
     private String username;
-
-    @Column(name = "img")
     private String img;
-
-    @Column(name = "dob")
     private LocalDate dob;
-
-    @Column(name = "gender")
     private boolean gender;
-
-    @Column(name = "address")
     private String address;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "email")
     private String email;
-
-
-    //getter & setter
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-
 
     public String getFirstName() {
         return firstName;
