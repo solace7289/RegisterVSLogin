@@ -29,6 +29,14 @@ public class UserServiceImp implements UserService {
     @Override
     public User userCreate(UserCreatation request) {
         User user = new User();
+
+        //checking username is existed or not
+        if (userRepository.existsByUsername(user.getUsername())){
+            //if existed -> throw runtime exception
+            throw new RuntimeException("Username existed!");
+        }
+
+        //else: create new user
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
@@ -43,7 +51,10 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getUserById(String userId) {
-        return userRepository.findByUserId(userId);
+        //return result: user, if not then throw an exception: User not found (call to class exception in package Exception)
+        return userRepository.findById(userId).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
     }
 
     @Override
