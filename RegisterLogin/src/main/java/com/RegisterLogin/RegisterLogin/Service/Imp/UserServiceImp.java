@@ -31,7 +31,7 @@ public class UserServiceImp implements UserService {
         User user = new User();
 
         //checking username is existed or not
-        if (userRepository.existsByUsername(user.getUsername())){
+        if (userRepository.existsByUsername(request.getUsername())){
             //if existed -> throw runtime exception
             throw new RuntimeException("Username existed!");
         }
