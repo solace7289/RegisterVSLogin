@@ -11,8 +11,6 @@ import java.util.List;
 public interface UserService {
     List<User> getAllUser();
 
-    void saveUser(User user);
-
     User userCreate(UserCreationRequest userCreationRequest);
 
     User getUserById(String userId);

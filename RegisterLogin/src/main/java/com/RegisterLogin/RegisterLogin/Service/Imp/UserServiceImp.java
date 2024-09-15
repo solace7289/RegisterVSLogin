@@ -18,22 +18,18 @@ import java.util.List;
 
 @Service
 //@RequiredArgsConstructor
-//@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImp implements UserService {
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @Override
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
-    @Override
-    public void saveUser(User user) {
-        userRepository.save(user);
-    }
 
     @Override
     public User userCreate(UserCreationRequest request) {
