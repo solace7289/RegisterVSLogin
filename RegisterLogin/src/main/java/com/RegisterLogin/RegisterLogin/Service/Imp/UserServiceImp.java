@@ -3,20 +3,27 @@ package com.RegisterLogin.RegisterLogin.Service.Imp;
 import com.RegisterLogin.RegisterLogin.Entities.User;
 import com.RegisterLogin.RegisterLogin.Exception.AppException;
 import com.RegisterLogin.RegisterLogin.Exception.ErrorCode;
+import com.RegisterLogin.RegisterLogin.Mapper.UserMapper;
 import com.RegisterLogin.RegisterLogin.Repository.UserRepository;
 import com.RegisterLogin.RegisterLogin.Service.UserService;
 import com.RegisterLogin.RegisterLogin.dto.request.UserCreationRequest;
 import com.RegisterLogin.RegisterLogin.dto.request.UserUpdateRequest;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+//@RequiredArgsConstructor
+//@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImp implements UserService {
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public List<User> getAllUser() {
@@ -30,7 +37,6 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User userCreate(UserCreationRequest request) {
-        User user = new User();
 
         //checking username is existed or not
         if (userRepository.existsByUsername(request.getUsername())){
@@ -39,14 +45,7 @@ public class UserServiceImp implements UserService {
         }
 
         //else: create new user
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setUsername(request.getUsername());
-        user.setGender(request.isGender());
-        user.setPassword(request.getPassword());
-        user.setDob(request.getDob());
-        user.setAddress(request.getAddress());
-        user.setImg(request.getImg());
+        User user = userMapper.toUser(request);
 
         return userRepository.save(user);
     }
@@ -55,7 +54,7 @@ public class UserServiceImp implements UserService {
     public User getUserById(String userId) {
         //return result: user, if not then throw an exception: User not found (call to class exception in package Exception)
         return userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("User not found")
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
     }
 
@@ -63,13 +62,8 @@ public class UserServiceImp implements UserService {
     public User updateUser(String userId, UserUpdateRequest request) {
         User user = getUserById(userId);
 
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setGender(request.isGender());
-        user.setPassword(request.getPassword());
-        user.setDob(request.getDob());
-        user.setAddress(request.getAddress());
-        user.setImg(request.getImg());
+        //mapping data
+        userMapper.updateUser(user, request);
 
         return userRepository.save(user);
     }
