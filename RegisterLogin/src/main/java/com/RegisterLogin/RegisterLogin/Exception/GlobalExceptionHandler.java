@@ -9,20 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    //hander runtime exception
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handingRuntimeException(RuntimeException exception){
+    //handler uncategorized exception
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse> handingException(Exception exception){
+
 
         ApiResponse apiResponse = new ApiResponse();
 
-        apiResponse.setCode(1001);
-        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
         //error base on user fault -> badrequest = 400
         // return a responseentity
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
+    //handler all app exception
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handingAppException(AppException exception){
 
@@ -39,8 +41,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<String> handlingMethodArgumentNotValidException(MethodArgumentNotValidException exception){
-        return ResponseEntity.badRequest().body(exception.getFieldError().getDefaultMessage());
+    ResponseEntity<ApiResponse> handlingMethodArgumentNotValidException(MethodArgumentNotValidException exception){
+
+        String enumKey = exception.getFieldError().getDefaultMessage();
+
+        ErrorCode errorCode = ErrorCode.INVALID_KEY;
+
+        try {
+            errorCode = ErrorCode.valueOf(enumKey);
+
+        }catch (IllegalArgumentException e){
+
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
 }

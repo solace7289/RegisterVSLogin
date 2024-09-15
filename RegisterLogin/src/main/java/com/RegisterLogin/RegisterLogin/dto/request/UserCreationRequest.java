@@ -12,7 +12,7 @@ public class UserCreationRequest {
     private String firstName;
     private String lastName;
 
-    @Size(min = 3, message = "Username must be at least 3 characters!")
+    @Size(min = 3, message = "USERNAME_INVALID")
     @NotNull
     private String username;
     private String img;
@@ -22,7 +22,7 @@ public class UserCreationRequest {
     private boolean gender;
     private String address;
 
-    @Size(min = 8, message = "Password must be at least 8 characters!")
+    @Size(min = 8, message = "PASSWORD_INVALID")
     @NotNull
     private String password;
 

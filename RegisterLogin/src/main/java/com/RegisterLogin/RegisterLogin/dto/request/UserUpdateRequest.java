@@ -1,5 +1,8 @@
 package com.RegisterLogin.RegisterLogin.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class UserUpdateRequest {
@@ -9,6 +12,9 @@ public class UserUpdateRequest {
     private LocalDate dob;
     private boolean gender;
     private String address;
+
+    @Size(min = 8, message = "Password must be at least 8 characters!")
+    @NotNull
     private String password;
     private String email;
 

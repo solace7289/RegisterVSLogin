@@ -19,7 +19,6 @@ public class User {
     @ToString.Exclude //add toString to ignore error stackOverFlow
     private String userId;
 
-
     @Column(name = "first_name")
     private String firstName;
 
