@@ -1,9 +1,11 @@
 package com.RegisterLogin.RegisterLogin.Service.Imp;
 
 import com.RegisterLogin.RegisterLogin.Entities.User;
+import com.RegisterLogin.RegisterLogin.Exception.AppException;
+import com.RegisterLogin.RegisterLogin.Exception.ErrorCode;
 import com.RegisterLogin.RegisterLogin.Repository.UserRepository;
 import com.RegisterLogin.RegisterLogin.Service.UserService;
-import com.RegisterLogin.RegisterLogin.dto.request.UserCreatation;
+import com.RegisterLogin.RegisterLogin.dto.request.UserCreationRequest;
 import com.RegisterLogin.RegisterLogin.dto.request.UserUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +29,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User userCreate(UserCreatation request) {
+    public User userCreate(UserCreationRequest request) {
         User user = new User();
 
         //checking username is existed or not
         if (userRepository.existsByUsername(request.getUsername())){
             //if existed -> throw runtime exception
-            throw new RuntimeException("Username existed!");
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
         //else: create new user

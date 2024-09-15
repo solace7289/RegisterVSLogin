@@ -2,12 +2,11 @@ package com.RegisterLogin.RegisterLogin.Controllers;
 
 import com.RegisterLogin.RegisterLogin.Entities.User;
 import com.RegisterLogin.RegisterLogin.Service.UserService;
-import com.RegisterLogin.RegisterLogin.dto.request.UserCreatation;
+import com.RegisterLogin.RegisterLogin.dto.response.ApiResponse;
+import com.RegisterLogin.RegisterLogin.dto.request.UserCreationRequest;
 import com.RegisterLogin.RegisterLogin.dto.request.UserUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +19,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create-user")
-    public User createUser(@RequestBody @Valid UserCreatation request){
-        return userService.userCreate(request);
+    public ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request){
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(userService.userCreate(request));
+
+        return apiResponse;
     }
 
     //get all users in database

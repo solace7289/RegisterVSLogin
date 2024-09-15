@@ -1,7 +1,7 @@
 package com.RegisterLogin.RegisterLogin.Service;
 
 import com.RegisterLogin.RegisterLogin.Entities.User;
-import com.RegisterLogin.RegisterLogin.dto.request.UserCreatation;
+import com.RegisterLogin.RegisterLogin.dto.request.UserCreationRequest;
 import com.RegisterLogin.RegisterLogin.dto.request.UserUpdateRequest;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public interface UserService {
 
     void saveUser(User user);
 
-    User userCreate(UserCreatation userCreatation);
+    User userCreate(UserCreationRequest userCreationRequest);
 
     User getUserById(String userId);
 
