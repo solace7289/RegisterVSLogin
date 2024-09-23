@@ -1,14 +1,13 @@
-package com.RegisterLogin.RegisterLogin.dto.response;
+package com.RegisterLogin.RegisterLogin.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
+public class IntrospectRequest {
     String token;
-    boolean Authenticated;
 }

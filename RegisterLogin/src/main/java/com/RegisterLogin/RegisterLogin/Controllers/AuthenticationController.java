@@ -23,14 +23,14 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
 
-    @PostMapping("/log-in")
+    @PostMapping("/login")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
-        boolean result = authenticationService.authenticate(request);
+        var result = authenticationService.authenticate(request);
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(AuthenticationResponse.builder()
-                        .Authenticated(result)
-                        .build())
+                .result(result)
                 .build();
     }
+
+
 
 }
