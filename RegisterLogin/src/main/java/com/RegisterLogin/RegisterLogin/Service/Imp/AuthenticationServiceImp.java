@@ -5,18 +5,25 @@ import com.RegisterLogin.RegisterLogin.Exception.ErrorCode;
 import com.RegisterLogin.RegisterLogin.Repository.UserRepository;
 import com.RegisterLogin.RegisterLogin.Service.AuthenticationService;
 import com.RegisterLogin.RegisterLogin.dto.request.AuthenticationRequest;
+import com.RegisterLogin.RegisterLogin.dto.request.IntrospectRequest;
 import com.RegisterLogin.RegisterLogin.dto.response.AuthenticationResponse;
+import com.RegisterLogin.RegisterLogin.dto.response.IntrospectResponse;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -30,7 +37,9 @@ public class AuthenticationServiceImp implements AuthenticationService {
     UserRepository userRepository;
 
     //key
-    protected static final String SIGNER_KEY = "CDHqPBzvf/cd16lcRMOGzLh3d0jFYam6J+cSO1luuzHgl/4KcutQLJes88De76A5";
+    @NonFinal
+    @Value("${jwt.signerKey}")
+    protected String SIGNER_KEY;
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -94,6 +103,29 @@ public class AuthenticationServiceImp implements AuthenticationService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    //introspect token
+    @Override
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+
+        //get token
+        var token = request.getToken();
+
+        //verifier
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        //check token expired?
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verified = signedJWT.verify(verifier);
+
+        return IntrospectResponse.builder()
+                .valid(verified && expiryTime.after(new Date()))
+                .build();
     }
 
 
